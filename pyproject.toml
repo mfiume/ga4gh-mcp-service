@@ -1,0 +1,43 @@
+[project]
+name = "ga4gh-mcp-service"
+version = "0.1.0"
+description = "Universal MCP server for GA4GH services, starting with the GA4GH Implementation Registry."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Marc Fiume" }]
+keywords = ["ga4gh", "mcp", "genomics", "drs", "trs", "tes", "beacon", "model-context-protocol"]
+
+# Pinned for reproducibility (verified working on Python 3.14, 2026-07-05).
+dependencies = [
+    "mcp==1.28.1",
+    "httpx==0.28.1",
+    "pydantic==2.13.4",
+    "pydantic-settings==2.14.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+    "respx==0.23.1",
+]
+
+[project.scripts]
+ga4gh-mcp = "ga4gh_mcp.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/mfiume/ga4gh-mcp-service"
+Registry = "https://implementation-registry.ga4gh.org/"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ga4gh_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

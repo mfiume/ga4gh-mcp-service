@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# venvs
+.venv/
+venv/
+env/
+
+# env / secrets
+.env
+*.local
+
+# caches / tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.DS_Store
+
+# runtime artifacts
+docs/compatibility_probe.json
+~/.ga4gh-mcp/
+scratch_*.md
