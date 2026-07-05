@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.git/
+.gitignore
+tests/
+docs/compatibility-raw.json
+.DS_Store
+.ga4gh-mcp/
+tokens.json
+config.yaml

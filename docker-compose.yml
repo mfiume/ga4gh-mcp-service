@@ -1,0 +1,14 @@
+services:
+  ga4gh-mcp:
+    build: .
+    image: ga4gh-mcp-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      GA4GH_MCP_TRANSPORT: http
+      GA4GH_MCP_HOST: 0.0.0.0
+      GA4GH_MCP_PORT: "8080"
+      GA4GH_MCP_LOG_LEVEL: INFO
+      # Supply tokens for protected services as needed, e.g.:
+      # GA4GH_MCP_TOKEN_DATA_TERRA_BIO: "${TERRA_TOKEN}"
+    restart: unless-stopped

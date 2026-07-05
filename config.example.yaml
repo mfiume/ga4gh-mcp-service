@@ -1,0 +1,29 @@
+# Optional auth config for the GA4GH MCP service.
+# Copy to ~/.ga4gh-mcp/config.yaml (or point GA4GH_MCP_CONFIG_FILE at it).
+# Everything here can also be supplied via environment variables (see docs/auth.md).
+
+hosts:
+  # A service you already hold a bearer token for (static bearer).
+  data.terra.bio:
+    token: "PASTE_YOUR_BEARER_TOKEN_HERE"
+
+  # A service that uses OAuth device-code (interactive login).
+  # Endpoints are auto-discovered via OIDC if omitted; client_id is required.
+  some-oidc-host.org:
+    oauth:
+      grant: device_code
+      client_id: "your-registered-client-id"
+      scope: "openid offline_access"
+      # token_endpoint / device_authorization_endpoint discovered if omitted:
+      # token_endpoint: "https://issuer/oauth/token"
+      # device_authorization_endpoint: "https://issuer/oauth/device"
+      # issuer: "https://issuer"
+
+  # A service that uses OAuth client-credentials (machine-to-machine).
+  m2m-host.org:
+    oauth:
+      grant: client_credentials
+      client_id: "svc-client"
+      client_secret: "svc-secret"
+      scope: "read"
+      # token_endpoint: "https://issuer/oauth/token"
