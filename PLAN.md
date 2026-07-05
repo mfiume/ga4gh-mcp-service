@@ -25,7 +25,7 @@ Bedrock, remote). Everything is verifiable from the CLI (no UI).
 - [x] Copy-paste client configs for Claude Desktop, Claude Code, Vertex, Bedrock (`docs/clients/`).
 - [x] Unit tests (mocked) + skippable live integration tests + `scripts/smoke.py` (both transports).
 - [x] `pyproject.toml` (uvx/pipx runnable), `Dockerfile`, `docker-compose.yml`.
-- [ ] Pushed to `mfiume/ga4gh-mcp-service` (create repo). ← final step
+- [x] Pushed to `mfiume/ga4gh-mcp-service` — https://github.com/mfiume/ga4gh-mcp-service ✅
 
 ---
 

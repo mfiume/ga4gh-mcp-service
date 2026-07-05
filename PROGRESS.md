@@ -36,3 +36,9 @@ Running log of work on `ga4gh-mcp-service`. Newest at bottom.
 - **Docs + packaging:** PLAN.md, README, `docs/clients/*` (Desktop/Code/Vertex/Bedrock),
   `docs/auth.md`, config example, Dockerfile, docker-compose.
 - **Next:** commit + push to `mfiume/ga4gh-mcp-service`.
+
+## 2026-07-05 (cont.)
+
+- Lint clean (ruff), 46 unit tests pass, smoke 15/15.
+- **Pushed to https://github.com/mfiume/ga4gh-mcp-service** (public, branch `main`).
+- v1 Definition of Done fully met.
