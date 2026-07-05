@@ -162,3 +162,13 @@ service is isolated. Registry data cached with TTL; per-service probes cached br
 - **Known gaps / future:** Data Connect / Beacon-query / htsget-ticket / WES-run type-aware tools
   not yet added (generic `call_service_endpoint` covers them today); Docker image unbuilt locally;
   no server-side pagination for very large TRS listings (limit-capped).
+- **2026-07-05 — prior attempt discovered on push.** `mfiume/ga4gh-mcp-service` already had a
+  complete prior v1 on `main` (23 tools; DRS/TRS/**WES**; OAuth device-code + client-creds +
+  Passport pass-through; 46 tests; pushed public). This session was a fresh, independent rebuild
+  (18 tools; DRS/TRS/**TES/Beacon**; 63 tests; dual-transport SDK smoke). **Decision: do NOT
+  overwrite `main`.** Pushed this rebuild to branch **`fable5-rebuild`** so Marc can compare and
+  choose. PR creation is blocked by unrelated histories; compare here:
+  `https://github.com/mfiume/ga4gh-mcp-service/compare/main...fable5-rebuild`.
+  Both runs independently converged on the same reality (~24 live; `type.version` ≠ spec version;
+  Terra/Beacon non-standard). Options for Marc: (a) keep `main`, cherry-pick TES/Beacon + smoke +
+  matrix; (b) replace `main` with this branch; (c) merge best of both.
