@@ -172,3 +172,10 @@ service is isolated. Registry data cached with TTL; per-service probes cached br
   Both runs independently converged on the same reality (~24 live; `type.version` ≠ spec version;
   Terra/Beacon non-standard). Options for Marc: (a) keep `main`, cherry-pick TES/Beacon + smoke +
   matrix; (b) replace `main` with this branch; (c) merge best of both.
+- **2026-07-06 — federation + Data Connect (ga4gh-aws-opendata integration).** Added
+  `GA4GH_MCP_EXTRA_REGISTRIES` (comma-separated GA4GH Service Registry `/services` URLs): the client
+  fetches + normalizes their service-info entries and merges them into `implementations()`, resilient
+  to either the core or a federated registry being down. Added a `DataConnect` plugin + tools
+  `data_connect_list_tables` / `data_connect_table_info` / `data_connect_search` (tool count 18→21).
+  Verified end-to-end against a live `ga4gh-aws-opendata` deployment (discovery + gnomAD SQL + DRS).
+  Suite: 70 passed, 3 skipped. See the sibling repo `mfiume/ga4gh-aws-opendata`.
