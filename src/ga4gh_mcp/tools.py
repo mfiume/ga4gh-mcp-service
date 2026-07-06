@@ -19,6 +19,7 @@ from .registry import summarize
 from .serviceinfo import analyze_service_info
 from .services import all_plugins, api_base, get_plugin
 from .services import beacon as beacon_mod
+from .services import data_connect as dc_mod
 from .services import drs as drs_mod
 from .services import tes as tes_mod
 from .services import trs as trs_mod
@@ -232,6 +233,25 @@ async def tes_get_task(ctx: ServerContext, *, service_id: str, task_id: str) -> 
 async def beacon_info(ctx: ServerContext, *, service_id: str) -> dict[str, Any]:
     s, auth = await _service_and_auth(ctx, service_id, "Beacon")
     return _res_envelope(await beacon_mod.beacon_info(ctx.http, s, auth))
+
+
+@guarded
+async def data_connect_list_tables(ctx: ServerContext, *, service_id: str) -> dict[str, Any]:
+    s, auth = await _service_and_auth(ctx, service_id, "DataConnect")
+    return _res_envelope(await dc_mod.list_tables(ctx.http, s, auth))
+
+
+@guarded
+async def data_connect_table_info(ctx: ServerContext, *, service_id: str,
+                                  table: str) -> dict[str, Any]:
+    s, auth = await _service_and_auth(ctx, service_id, "DataConnect")
+    return _res_envelope(await dc_mod.table_info(ctx.http, s, auth, table))
+
+
+@guarded
+async def data_connect_search(ctx: ServerContext, *, service_id: str, sql: str) -> dict[str, Any]:
+    s, auth = await _service_and_auth(ctx, service_id, "DataConnect")
+    return _res_envelope(await dc_mod.search(ctx.http, s, auth, sql))
 
 
 # ------------------------------------------------------------------------------- auth

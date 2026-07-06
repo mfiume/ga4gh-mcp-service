@@ -25,6 +25,13 @@ class Settings(BaseSettings):
 
     # --- Registry ---
     registry_base_url: str = "https://implementation-registry.ga4gh.org/api"
+    # Comma-separated GA4GH Service Registry `/services` URLs to federate alongside the public
+    # Implementation Registry (e.g. a ga4gh-aws-opendata deployment). Their services appear in
+    # list_services / get_service / health / DRS / Data Connect exactly like registered ones.
+    extra_registries: str = ""
+
+    def extra_registry_urls(self) -> list[str]:
+        return [u.strip() for u in self.extra_registries.split(",") if u.strip()]
 
     # --- Transport ---
     transport: Transport = "stdio"

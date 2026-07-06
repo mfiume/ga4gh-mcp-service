@@ -1,6 +1,6 @@
 """Type-aware service plugins. Importing this package registers all built-in plugins."""
 
-from . import beacon, drs, tes, trs  # noqa: F401  (import side effect: register plugins)
+from . import beacon, data_connect, drs, tes, trs  # noqa: F401  (side effect: register plugins)
 from .base import (
     ServiceTypePlugin,
     all_plugins,
@@ -23,4 +23,5 @@ __all__ = [
     "trs",
     "tes",
     "beacon",
+    "data_connect",
 ]

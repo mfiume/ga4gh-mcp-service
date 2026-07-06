@@ -169,6 +169,22 @@ def build_server(settings: Settings | None = None,
         """Beacon: fetch the Beacon v2 framework info document."""
         return await tools.beacon_info(context, service_id=service_id)
 
+    @mcp.tool()
+    async def data_connect_list_tables(service_id: str) -> dict[str, Any]:
+        """Data Connect: list the tables a service exposes (e.g. AWS Open Data variant tables)."""
+        return await tools.data_connect_list_tables(context, service_id=service_id)
+
+    @mcp.tool()
+    async def data_connect_table_info(service_id: str, table: str) -> dict[str, Any]:
+        """Data Connect: get a table's JSON-Schema data model (columns + types)."""
+        return await tools.data_connect_table_info(context, service_id=service_id, table=table)
+
+    @mcp.tool()
+    async def data_connect_search(service_id: str, sql: str) -> dict[str, Any]:
+        """Data Connect: run a read-only SQL query against a service's tables and return rows.
+        Example: SELECT gene, oe_lof_upper AS loeuf FROM gnomad.gene_constraint WHERE gene='BRCA1'."""
+        return await tools.data_connect_search(context, service_id=service_id, sql=sql)
+
     # ------------------------------------------------------------------------ auth tools
     @mcp.tool()
     async def auth_status() -> dict[str, Any]:
@@ -189,5 +205,7 @@ TOOL_NAMES = [
     "list_services", "get_service", "search_services", "list_service_types", "list_standards",
     "list_organisations", "check_service_health", "get_service_info", "call_service_endpoint",
     "drs_get_object", "drs_get_access_url", "trs_list_tools", "trs_get_tool",
-    "tes_list_tasks", "tes_get_task", "beacon_info", "auth_status", "auth_device_login",
+    "tes_list_tasks", "tes_get_task", "beacon_info",
+    "data_connect_list_tables", "data_connect_table_info", "data_connect_search",
+    "auth_status", "auth_device_login",
 ]

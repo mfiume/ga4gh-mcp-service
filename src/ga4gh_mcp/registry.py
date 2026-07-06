@@ -51,6 +51,42 @@ def summarize(s: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+# GA4GH service-info type.artifact -> canonical product label used across the tools.
+_ARTIFACT_PRODUCT = {
+    "drs": "DRS", "tes": "TES", "trs": "TRS", "wes": "WES", "beacon": "Beacon",
+    "htsget": "htsget", "refget": "refget", "seqcol": "seqcol", "rnaget": "RNAget",
+    "data-connect": "DataConnect", "service-registry": "ServiceRegistry",
+}
+
+
+def normalize_service_info(si: dict[str, Any], *, source: str) -> dict[str, Any]:
+    """Map a GA4GH Service Registry service-info entry into the internal registry shape.
+
+    A federated GA4GH Service Registry returns service-info objects (id/name/type/url/...); the
+    tools expect the Implementation Registry shape (implementationId/standardVersion/serviceInfoUrl/…).
+    """
+    t = si.get("type") or {}
+    artifact = (t.get("artifact") or "").lower()
+    url = (si.get("url") or "").rstrip("/")
+    org = si.get("organization") or si.get("organisation") or {}
+    return {
+        "id": si.get("id"),
+        "implementationId": si.get("id"),
+        "name": si.get("name"),
+        "description": si.get("description"),
+        "url": url,
+        "serviceInfoUrl": (url + "/service-info") if url else None,
+        "implementationType": "SERVICE",
+        "environment": (si.get("environment") or "").upper() or None,
+        "organisation": {"name": org.get("name") if isinstance(org, dict) else None},
+        "standardVersion": {
+            "ga4ghProduct": _ARTIFACT_PRODUCT.get(artifact, t.get("artifact")),
+            "version": t.get("version"),
+        },
+        "source": f"federated:{source}",
+    }
+
+
 class RegistryClient:
     def __init__(self, http: Ga4ghHttpClient, settings: Settings) -> None:
         self._http = http
@@ -86,10 +122,35 @@ class RegistryClient:
     async def standards(self) -> list[dict[str, Any]]:
         return await self._get_list("standards")
 
+    async def federated(self) -> list[dict[str, Any]]:
+        """Best-effort fetch + normalize of services from extra GA4GH Service Registries.
+
+        A failing or offline federated registry is skipped (never crashes a listing).
+        """
+        out: list[dict[str, Any]] = []
+        for url in self._settings.extra_registry_urls():
+            cached = self._cache.get(f"fed:{url}")
+            if cached is None:
+                res = await self._http.get_json(url)
+                cached = res.json if (res.liveness.value == "live"
+                                      and isinstance(res.json, list)) else []
+                self._cache.set(f"fed:{url}", cached)
+            for si in cached:
+                if isinstance(si, dict):
+                    out.append(normalize_service_info(si, source=url))
+        return out
+
     async def implementations(self, include_deployments: bool = False) -> list[dict[str, Any]]:
-        items = list(await self.services())
-        if include_deployments:
-            items += await self.deployments()
+        items: list[dict[str, Any]] = []
+        try:
+            items += await self.services()
+            if include_deployments:
+                items += await self.deployments()
+        except ToolError:
+            # A down core registry must not hide federated services (and vice-versa).
+            if not self._settings.extra_registry_urls():
+                raise
+        items += await self.federated()
         return items
 
     def invalidate(self) -> None:
