@@ -50,6 +50,8 @@ async def test_list_services_includes_federated():
         assert "DataConnect" in products and "DRS" in products
         ids = {s["implementationId"] for s in r["data"]}
         assert "org.ga4gh.aws-opendata.data-connect" in ids
+        # provenance is explicit: federated entries carry a "federated:<url>" source
+        assert all(s["source"].startswith("federated:") for s in r["data"])
     finally:
         await ctx.aclose()
 

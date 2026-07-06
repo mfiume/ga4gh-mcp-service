@@ -48,6 +48,10 @@ def summarize(s: dict[str, Any]) -> dict[str, Any]:
         "url": s.get("url"),
         "serviceInfoUrl": s.get("serviceInfoUrl"),
         "has_service_info_url": bool(s.get("serviceInfoUrl")),
+        # provenance: which registry this entry came from. The public GA4GH Implementation
+        # Registry records no hosting/cloud field, so hosting cannot be inferred for its entries;
+        # entries with a "federated:<url>" source came from an explicitly federated registry.
+        "source": s.get("source") or "ga4gh-implementation-registry",
     }
 
 
